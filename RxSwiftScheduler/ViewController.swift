@@ -10,7 +10,7 @@ class ViewController: UIViewController {
         Observable.just("Hello, RxSwift")
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { value in
-                print(value)
+                print("MainScheduler : ", value)
             })
             .disposed(by: disposeBag)
         
@@ -18,14 +18,14 @@ class ViewController: UIViewController {
             .observe(on: ConcurrentDispatchQueueScheduler(qos: .background))
             .map { $0 * 2 }
             .subscribe(onNext: { value in
-                print("Background processing:", value)
+                print("ConcurrentDispatchQueueScheduler : ", value)
             })
             .disposed(by: disposeBag)
         
         Observable.of("Task 1", "Task 2", "Task 3")
             .observe(on: SerialDispatchQueueScheduler(qos: .default))
-            .subscribe(onNext: { task in
-                print("Executing:", task)
+            .subscribe(onNext: { value in
+                print("SerialDispatchQueueScheduler : ", value)
             })
             .disposed(by: disposeBag)
         
@@ -33,8 +33,8 @@ class ViewController: UIViewController {
         
         Observable.of("Operation 1", "Operation 2", "Operation 3")
             .observe(on: OperationQueueScheduler(operationQueue: operationQueue))
-            .subscribe(onNext: { operation in
-                print("Executing on OperationQueue:", operation)
+            .subscribe(onNext: { value in
+                print("OperationQueueScheduler : ", value)
             })
             .disposed(by: disposeBag)
     }
